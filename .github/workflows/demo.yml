@@ -1,19 +1,36 @@
-name: pyinstaller
-on: workflow_dispatch
+name: workflow_env
+on:
+  workflow_dispatch:
+
 
 jobs:
-
-  build-on-windows:
-    runs-on: windows-2022
+  test-secrets:
+    environment: config test
+    env:
+      DB_U: ${{vars.DB_USERNAME}}
+      DB_P: ${{ vars.DB_PASSWORD_ON_TEST_ENV }}
+    runs-on: ubuntu-22.04
     steps:
       - name: checkout code
         uses: actions/checkout@v3
-      - name: install pyinstaller
-        run: pip install pyinstaller
-      - name: build exe
-        run: pyinstaller sha256.py -F
-      - name: upload exe file
-        uses: actions/upload-artifact@v3
-        with:
-          name: sha256-windows-exe
-          path: dist/sha256.exe
+      - name: check env u
+        run: echo "u=${{ env.DB_U }}"
+      - name: check env p
+        run: echo "p=${{ env.DB_P }}"
+      - name: test with python
+        run: python secrets.py
+  pro-secrets:
+    environment: production
+    env:
+      DB_U: ${{vars.DB_USERNAME}}
+      DB_P: ${{ vars.DB_PASSWORD_ON_PRO_ENV }}
+    runs-on: ubuntu-22.04
+    steps:
+      - name: checkout code
+        uses: actions/checkout@v3
+      - name: check env u
+        run: echo "u=${{ env.DB_U }}"
+      - name: check env p
+        run: echo "p=${{ env.DB_P }}"
+      - name: test with python
+        run: python secrets.py
