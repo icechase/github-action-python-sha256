@@ -8,7 +8,7 @@ jobs:
     environment: config test
     env:
       DB_U: ${{vars.DB_USERNAME}}
-      DB_P: ${{ vars.DB_PASSWORD_ON_TEST_ENV }}
+      DB_P: ${{ secrets.DB_PASSWORD_ON_TEST_ENV }}
     runs-on: ubuntu-22.04
     steps:
       - name: checkout code
@@ -21,7 +21,7 @@ jobs:
     environment: production
     env:
       DB_U: ${{vars.DB_USERNAME}}
-      DB_P: ${{ vars.DB_PASSWORD_ON_PRO_ENV }}
+      DB_P: ${{ secrets.DB_PASSWORD_ON_PRO_ENV }}
     runs-on: ubuntu-22.04
     steps:
       - name: checkout code
